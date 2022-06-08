@@ -118,7 +118,7 @@
     gtag('config', 'UA-108048997-1');
   </script>
 
-    <title>ORViT</title>
+    <title>SViT</title>
     <meta property="og:title" content="Object-Region Video Transformers"/>
 </head>
 
@@ -172,7 +172,7 @@
         <tr>
             <td align=center>
                 <center>
-                    <span style="font-size:20px"><a href="TODO"> [Paper]</a></span>
+                    <span style="font-size:20px"><a href="TODOARXIV"> [Paper]</a></span>
                 </center>
             </td>
             <td align=center>
@@ -182,22 +182,31 @@
             </td>
             <td align=center>
                 <center>
-                        <span style="font-size:20px"><a href='data/2021ORViT.txt'> [Bibtex]</a></span>
+                        <span style="font-size:20px"><a href='data/2022SViT.txt'> [Bibtex]</a></span>
                 </center>
             </td>
         </tr>
     </table>
 <br><br><br>
-<center><img src="data/figures/teaser_prompting5.pdf" align="middle" width="400" height="500" ></center></center>
+<!-- <center><img src="data/figures/teaser_prompting_resized.png" align="middle" width="400" height="500" ></center></center> -->
+<center><img src="data/figures/teaser_prompting_resized.png" align="middle"></center></center>
 <br><br>
-Our ORViT model incorporates object information into video transformer layers.
+Our approach SViT brings structured scene representations from still images into video.
+We use the <bf>HA</bf>nd-<bf>O</bf>bject <bf>G</bf>raph (HAOG) annotations of still images that are only available during training,
+and videos, which may come from a different domain, with their downstream task annotations.
+We design a shared video & image transformer that can handle both video and image inputs.
+During training, given an image, the patch and object tokens are processed together,
+and the object tokens learn to predict the HAOG,
+whereas given a video input, the transformer predicts the video label (e.g. <i>Washing</i>) based on the patch tokens.
+During inference, the learned object prompts, which have captured the structured scene information from images, are used to predict the video label.
+<!-- Our ORViT model incorporates object information into video transformer layers.
 The figure shows the standard (uniformly spaced) transformer patch-tokens in <span style="color:Blue;">blue</span>,
 and object-regions corresponding to detections in <span style="color:Orange;">orange</span>.
 In ORViT any temporal patch-token (e.g., the patch in <b>black</b> at time T)
 attends to all patch tokens (<span style="color:Blue;">blue</span>) and region tokens (<span style="color:Orange;">orange</span>).
 This allows the new patch representation to be informed by the objects.
 Our method shows strong performance improvement on multiple video understanding tasks and datasets,
-demonstrating the value of a model that incorporates object representations into a transformer architecture.
+demonstrating the value of a model that incorporates object representations into a transformer architecture. -->
 
 
 <br><br><br>
@@ -205,84 +214,46 @@ demonstrating the value of a model that incorporates object representations into
 <table align=center>
     <center><h1>Abstract</h1></center>
 </table>
-Recently, video transformers have shown great success in video understanding,
-exceeding CNN performance; yet existing video transformer models do not
-explicitly model objects, although objects can be essential for recognizing actions.
-In this work, we present Object-Region Video Transformers (ORViT), an
-<i>object-centric</i> approach that extends video transformer layers with a block
-that directly incorporates object representations.
-The key idea is to fuse object-centric representations starting from early layers
-and propagate them into the transformer-layers, thus affecting the spatio-temporal
-representations throughout the network.
-Our ORViT block consists of two object-level streams: appearance and dynamics.
-In the appearance stream, an ''Object-Region Attention'' module applies self-attention over the patches and <i>object regions</i>.
-In this way, visual object regions interact with uniform patch tokens and enrich them with contextualized object information.
-We further model object dynamics via a separate ''Object-Dynamics Module'', which captures trajectory interactions,
-and show how to integrate the two streams.
-We evaluate our model on four tasks and five datasets:
-compositional and few-shot action recognition on SomethingElse, spatio-temporal action detection on AVA, and standard action recognition on Something-Something V2, Diving48 and Epic-Kitchen100.
-We show strong performance improvement across all tasks and datasets considered, demonstrating the value of a model that incorporates object representations into a transformer architecture.
+
+Recent action recognition models have achieved impressive results by integrating objects, their locations and interactions. 
+However, obtaining dense structured annotations for each frame is tedious and time-consuming, making these methods expensive to train and less scalable. 
+At the same time, if a small set of annotated images is available, either within or outside the domain of interest, 
+how could we leverage these for a video downstream task? We propose a learning framework StructureViT (SViT for short), 
+which demonstrates how utilizing the structure of a small number of images only available during training can improve a video model. 
+SViT relies on two key insights. First, as both images and videos contain structured information, 
+we enrich a transformer model with a set of <i>object tokens</i> that can be used across images and videos. 
+Second, the scene representations of individual frames in video should ``align'' with those of still images. 
+This is achieved via a <i>Frame-Clip Consistency</i> loss, which ensures the flow of structured information between images and videos. 
+We explore a particular instantiation of scene structure, namely a <i>Hand-Object Graph</i>, consisting of hands and objects with their locations as nodes, 
+and physical relations of contact/no-contact as edges. SViT shows strong performance improvements on multiple video understanding tasks and datasets.
+<!-- %; and it wins first place in the Ego4D CVPR'22 Object State Localization challenge. -->
+
+
 <br><br><br>
 <hr>
 <table align=center>
     <center><h1 id="motivation">Motivation</h1></center>
 </table>
 <p>
-    Consider the simple action of ''Picking up a coffee cup'' below.
-    Intuitively, a human recognizing this action would identify the hand, the coffee cup and the coaster, and perceive the upward movement of the cup.
-    This highlights <b>three important cues</b> needed for recognizing actions:
-        What/where are the objects? How do they interact? and how do they move?
-    Indeed, evidence from cognitive psychology also supports this structure of the action-perception system.
-<!--    It seems intuitively clear that machine vision models should also capture this reasoning structure,-->
-<!--    and indeed this has been explored in the past.-->
+TODO
 </p>
 <center><img src="data/videos/motivation.gif" align="middle" width="300"></center>
-
-<br>
-<hr>
-<br>
-<table align=center>
-    <center><h1 id="object-centric">Object-Centric Approach</h1></center>
-</table>
-
-Recently, video transformers have been introduced as powerful video understanding models.
-In these models, each video frame is divided into patches, and a spatio-temporal self-attention architecture obtains a context-dependent representation for the patches.
-However, there is no explicit representation of objects in this approach, which makes it harder for such models to capture compositionality.
-The challenge in building such an architecture is that it should have components for modeling the appearance of objects, the interaction between objects, and the dynamics of the objects (irrespective of their visual appearance).
-We would like the objects to influence the representation of the scene throughout the bottom-up process rather than as a post-processing stage.
-Our key idea is that object regions can be introduced into transformers in a similar way to that of the regular patches, and dynamics can also be integrated into this framework in a natural way.
-We refer to our model as an ''Object-Region Video Transformer'' (or ORViT).
-
-<br><br><br>
-<center><img src="data/figures/object-centric.png" align="middle" width="300" height="500"></center>
-<br>
-<hr>
-<br>
 
 
 <!--        Model Section-->
 <table align=center>
-    <center><h1 id="block">ORViT Block</h1></center>
+    <center><h1 id="block">SViT Approach</h1></center>
 </table>
-The ORViT block takes as input patch tokens and outputs refined patch tokens based on object information.
-Within the block, it uses a set of object bounding boxes that are predicted using largely class-agnostic off-the-shelf trackers and serve to inform the model which parts of video contain objects.
-This information is then used to generate two separate object-level streams: an ``Object-Region Attention'' stream that models appearance, and an ``Object-Dynamics Module'' stream that models trajectories.
-We re-integrate the appearance and trajectory stream into a set of refined patch tokens, which have the same dimensionality as the input to our ORViT.
-This means that the ORViT block can be called repeatedly.
+TODO
 <center><img src="data/figures/highlevel_small.png" width=100 align="middle"></center>
 <hr><br>
 <table align=center>
-    <center><h1 id="model">Model</h1></center>
+    <center><h1 id="model">SViT</h1></center>
 </table>
-The goal of <b>Object-Region Attention</b> is to extract information about each object and use it to refine the patch tokens.
-This is done by using the object regions to extract descriptor vectors per region from the input tokens, which we refer to as object tokens.
-These vectors are then concatenated with the THW patch tokens and serve as the keys and values, while the queries are only the patch tokens.
-Finally, the output of the block is THW patch tokens.
-Thus, the key idea is to fuse object-centric information into spatio-temporal representations.
-Namely, inject the TO object region tokens into patch tokens THW.
-To model object dynamics, we introduce the <b>Object-Dynamics Module</b> that only considers the box coordinates.
+TODO
 <br><br><br>
-<center><img src="data/figures/architecture.png" align="middle" width="400" height="500"></center>
+<!-- <center><img src="data/figures/model figure.png" align="middle" width="400" height="500"></center> -->
+<center><img src="data/figures/model figure.png" align="middle"></center>
 <br><br>
 <hr>
 <br>
@@ -290,17 +261,7 @@ To model object dynamics, we introduce the <b>Object-Dynamics Module</b> that on
 <table align=center width=850px>
     <center><h1>Visualizations</h1></center>
 </table>
-<table>
-    <tr>
-        <center>
-            <img src="data/figures/vis_figure0.png"/></center>
-        <p> We visualize the attention allocated to the object tokens in the ORViT block (red, green, and blue) in each frame
-            for a video describing ''moving two objects away from each other''.
-            It can be seen that each remote object affects the patch-tokens in its region, whereas the hand has a broader map.</p>
-    </tr>
-</table>
-<br><br>
-<table>
+<!-- <table>
     <tr>
         <center>
             <img src="data/figures/vis_figure1.png"/></center>
@@ -308,14 +269,7 @@ To model object dynamics, we introduce the <b>Object-Dynamics Module</b> that on
             The visualization shows the attention maps corresponding to the CLS query.</p>
     </tr>
 </table>
-<br><br>
-<table>
-    <tr>
-        <center>
-            <img src="data/figures/vis_figure2.png"/></center>
-        <p> <b>Object contribution to the patch tokens.</b> For each object token, we plot the attention weight given by the patch tokens, normalized over the patch tokens.</p>
-    </tr>
-</table>
+<br><br> -->
 
 <br>
 
@@ -326,17 +280,17 @@ To model object dynamics, we introduce the <b>Object-Dynamics Module</b> that on
 <table align=center>
     <center><h1>Paper</h1></center>
     <tr>
-        <td><a href="https://arxiv.org/abs/2110.06915.pdf"><img class="layered-paper-big" style="height:175px; width: 150px; margin-bottom: 50px"
+        <td><a href="TODOARXIV.pdf"><img class="layered-paper-big" style="height:175px; width: 150px; margin-bottom: 50px"
                                                                 src="data/figures/paper.png"/></a></td>
-        <td><a href="https://arxiv.org/abs/2110.06915.pdf"></a></td>
+        <td><a href="TODOARXIV.pdf"></a></td>
         <td>
-                <span style="font-size:14pt"> Roei Herzig, Elad Ben-Avraham, Karttikeya Mangalam, Amir Bar, Gal Chechik, Anna Rohrbach, Trevor Darrell, Amir Globerson<br>
-              <i>Object-Region Video Transformers</i><br>
-            CVPR, 2022<br>
-            Hosted on <a href="https://arxiv.org/abs/2110.06915">arXiv</a>
+                <span style="font-size:14pt">  Elad Ben-Avraham, Roei Herzig, Karttikeya Mangalam, Amir Bar, Leonid Karlinsky, Anna Rohrbach, Trevor Darrell, Amir Globerson<br>
+              <i>Bringing Image Scene Structure to Video via Frame-Clip Consistency of Object Tokens</i><br>
+            <!-- Arxiv<br> -->
+            Hosted on <a href="TODOARXIV">arXiv</a>
                 </span>
         </td>
-        <span style="font-size:4pt"><a href="https://arxiv.org/abs/2110.06915.pdf"><br></a></span>
+        <span style="font-size:4pt"><a href="TODOARXIV.pdf"><br></a></span>
     </tr>
 </table>
 <hr>
@@ -344,7 +298,7 @@ To model object dynamics, we introduce the <b>Object-Dynamics Module</b> that on
     <tr>
         <td>
             <center><h1>Related Works</h1></center>
-            Our work builds and borrows code from multiple past works such as <a href="https://github.com/facebookresearch/SlowFast">SlowFast, MViT</a>, <a href="https://github.com/facebookresearch/TimeSformer">TimeSformer</a> and <a href="https://github.com/facebookresearch/Motionformer">MotionFormer</a>. If you found our work helpful, consider citing these works as well.
+            Our work builds and borrows code from <a href="https://github.com/facebookresearch/MViT">MViT</a>. If you found our work helpful, consider citing MViT as well.
         </td>
     </tr>
 </table>
@@ -355,10 +309,9 @@ To model object dynamics, we introduce the <b>Object-Dynamics Module</b> that on
         <td>
             <left>
                 <center><h1>Acknowledgements</h1></center>
-            We would like to thank Tete Xiao, Medhini Narasimhan, Rodolfo (Rudy) Corona, and Colorado Reed for helpful feedback and discussions.
+            <!-- We would like to thank Tete Xiao, Medhini Narasimhan, Rodolfo (Rudy) Corona, and Colorado Reed for helpful feedback and discussions. -->
                 This project has received funding from the European Research Council (ERC) under the European Unions Horizon 2020 research and innovation programme (grant ERC HOLI 819080).
                 Prof. Darrell’s group was supported in part by DoD including DARPA's XAI, and LwLL programs,  as well as BAIR's industrial alliance programs.
-                This work was completed in partial fulfillment for the Ph.D. degree of the first author.
             </left>
         </td>
     </tr>
