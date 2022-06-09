@@ -39,10 +39,6 @@
         -webkit-border-radius: 10px;
     }
 
-    img {
-        width: 100%
-    }
-
     img.header-img {
         height: 140px;
         border: 1px solid black;
@@ -267,8 +263,19 @@ and physical relations of contact/no-contact as edges. SViT shows strong perform
     the inference is performed only for the downstream video task without explicitly using the structured image annotations. 
 </p>
 
+<table align=center>
+    <center><h1 id="block">Hand-Object Graph</h1></center>
+</table>
+<p>
+    Our approach SViT learns a structured shared representation that arises from the interaction between the two modalities of images and videos. 
+    We consider the setting where the main goal is to learn video understanding downstream tasks while leveraging structured image data. 
+    In this paper, we focus on the following video tasks: action recognition and object state classification & localization. 
+    In training, we assume that we have access to task-specific video labels and structured scene annotations for images, <i>Hand-Object Graph</i>s.
+    Based on the structured representations obtained by using the <i>object tokens</i> and regularized by the <i>Frame-Clip Consistency loss</i>.
+    the inference is performed only for the downstream video task without explicitly using the structured image annotations. 
+</p>
 
-<center><img src="data/figures/highlevel_small.png" width=100 align="middle"></center>
+<center><img src="data/figures/haog.png" width="40%" height="40%" align="middle"></center>
 <hr><br>
 <table align=center>
     <center><h1 id="model">SViT</h1></center>
