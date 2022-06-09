@@ -267,12 +267,11 @@ and physical relations of contact/no-contact as edges. SViT shows strong perform
     <center><h1 id="block">Hand-Object Graph</h1></center>
 </table>
 <p>
-    Our approach SViT learns a structured shared representation that arises from the interaction between the two modalities of images and videos. 
-    We consider the setting where the main goal is to learn video understanding downstream tasks while leveraging structured image data. 
-    In this paper, we focus on the following video tasks: action recognition and object state classification & localization. 
-    In training, we assume that we have access to task-specific video labels and structured scene annotations for images, <i>Hand-Object Graph</i>s.
-    Based on the structured representations obtained by using the <i>object tokens</i> and regularized by the <i>Frame-Clip Consistency loss</i>.
-    the inference is performed only for the downstream video task without explicitly using the structured image annotations. 
+    As mentioned above, our motivation is to bring scene structure from still images into video. 
+    In order to achieve this, 
+    one component of this work is the construction of a semantic representation of the interactions between the hands and objects in the scene. 
+    Specifically, we propose to use a graph-structure we <i>Hand-Object Graph</i>{} (HAOG). 
+    The nodes of the HAOG represent two hands and two objects with their locations, whereas the edges correspond to physical properties such as contact/no contact. 
 </p>
 
 <center><img src="data/figures/haog.png" width="40%" height="40%" align="middle"></center>
@@ -280,7 +279,16 @@ and physical relations of contact/no-contact as edges. SViT shows strong perform
 <table align=center>
     <center><h1 id="model">SViT</h1></center>
 </table>
-TODO
+<p>
+Our shared video & image transformer model processes two different types of tokens: 
+standard patch tokens from the images and videos (<span style="color:rgb(142.8, 170.85, 219.3)"><b>blue</b></span>) and the object prompts (<span style="color:rgb(196.35, 137.7, 219.3)"><b>purple</b></span>), 
+that are transformed into object tokens (<span style="color:rgb(112.2, 48.45, 160.65)"><b>purple</b></span>) in the output. 
+During training, the object tokens (<span style="color:rgb(112.2, 48.45, 160.65)"><b>purple</b></span>) are trained to predict the HAOG for still images. 
+For video frames that have no HAOG annotation, we use our ``Frame-Clip'' loss to ensure consistency between the ``frame object tokens'' 
+(resulting from processing the frames separately) and the ``clip object tokens'' (resulting from processing the frame as part of the video). 
+Last, the final video downstream task prediction results from applying a video downstream task head on the average of the patch tokens in the transformer output 
+(after they have interacted with the clip object tokens (<span style="color:rgb(112.2, 48.45, 160.65)"><b>purple</b></span>).
+</p>
 <br><br><br>
 <!-- <center><img src="data/figures/model figure.png" align="middle" width="400" height="500"></center> -->
 <center><img src="data/figures/model figure.png" align="middle"></center>
