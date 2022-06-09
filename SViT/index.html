@@ -235,16 +235,39 @@ and physical relations of contact/no-contact as edges. SViT shows strong perform
     <center><h1 id="motivation">Motivation</h1></center>
 </table>
 <p>
-TODO
+    Semantic understanding of videos is a key challenge for machine vision and artificial intelligence. 
+    It is intuitive that video models should benefit from incorporating scene structure, 
+    e.g., the objects that appear in a video, their attributes, and the way they interact. 
+    In fact, several works have shown that such ``object-centric'' models perform well on tasks such as action recognition. 
+    However, most of these models require ground-truth structured annotations of video during training. 
+    This is clearly very costly, time-consuming, and not scalable.
+    <br>
+    This begs the question, <i>could we still benefit from scene structure in a less costly way? </i>
+    A possible direction is to explore methods that would only require sparsely annotated frames within a downstream video domain. 
+    Moreover, when it comes to structured annotations of static images, 
+    there are numerous datasets with annotations such as boxes, visual relationships, attributes, and segmentations. 
+    Since we can not always expect to have annotated images that perfect align with our downstream video task, 
+    how can these resources be used to build better video models? 
+    In this work, we propose such an approach, 
+    which is particularly well suited for transformer architectures and offers an effective mechanism to leverage image structure to improve video transformers.
 </p>
-<center><img src="data/videos/motivation.gif" align="middle" width="300"></center>
+<!-- <center><img src="data/videos/motivation.gif" align="middle" width="300"></center> -->
 
 
 <!--        Model Section-->
 <table align=center>
     <center><h1 id="block">SViT Approach</h1></center>
 </table>
-TODO
+<p>
+    Our approach SViT learns a structured shared representation that arises from the interaction between the two modalities of images and videos. 
+    We consider the setting where the main goal is to learn video understanding downstream tasks while leveraging structured image data. 
+    In this paper, we focus on the following video tasks: action recognition and object state classification & localization. 
+    In training, we assume that we have access to task-specific video labels and structured scene annotations for images, <i>Hand-Object Graph</i>s.
+    Based on the structured representations obtained by using the <i>object tokens</i> and regularized by the <i>Frame-Clip Consistency loss</i>.
+    the inference is performed only for the downstream video task without explicitly using the structured image annotations. 
+</p>
+
+
 <center><img src="data/figures/highlevel_small.png" width=100 align="middle"></center>
 <hr><br>
 <table align=center>
