@@ -15,7 +15,7 @@
         font-size: 18px;
         margin-left: auto;
         margin-right: auto;
-        width: 70%;
+        width: 60%;
     }
 
     h1 {
@@ -185,7 +185,7 @@
     </table>
 <br><br><br>
 <!-- <center><img src="data/figures/teaser_prompting_resized.png" align="middle" width="400" height="500" ></center></center> -->
-<center><img src="data/figures/teaser_prompting_resized.png" align="middle"></center></center>
+<center><img src="data/figures/teaser_prompting_resized.png" align="middle" width="100%"></center></center>
 <!-- <center><embed src="data/figures/teaser_prompting5.pdf" align="middle"></center></center> -->
 <!-- <center><embed src="data/figures/teaser_prompting5.pdf" width="500px" height="500px"></center></center> -->
 <!-- <iframe src="data/figures/teaser_prompting5.pdf"></iframe> -->
@@ -254,6 +254,8 @@ and physical relations of contact/no-contact as edges. SViT shows strong perform
 
 
 <!--        Model Section-->
+<br><br><br>
+<hr>
 <table align=center>
     <center><h1 id="block">SViT Approach</h1></center>
 </table>
@@ -266,9 +268,6 @@ and physical relations of contact/no-contact as edges. SViT shows strong perform
     the inference is performed only for the downstream video task without explicitly using the structured image annotations. 
 </p>
 
-<table align=center>
-    <center><h1 id="block">Hand-Object Graph</h1></center>
-</table>
 <p>
     As mentioned above, our motivation is to bring scene structure from still images into video. 
     In order to achieve this, 
@@ -277,9 +276,21 @@ and physical relations of contact/no-contact as edges. SViT shows strong perform
     The nodes of the HAOG represent two hands and two objects with their locations, whereas the edges correspond to physical properties such as contact/no contact. 
 </p>
 
+<!-- <table align=center>
+    <center><h1 id="block">Hand-Object Graph</h1></center>
+</table>
+<p>
+    As mentioned above, our motivation is to bring scene structure from still images into video. 
+    In order to achieve this, 
+    one component of this work is the construction of a semantic representation of the interactions between the hands and objects in the scene. 
+    Specifically, we propose to use a graph-structure we <i>Hand-Object Graph</i> (HAOG). 
+    The nodes of the HAOG represent two hands and two objects with their locations, whereas the edges correspond to physical properties such as contact/no contact. 
+</p> -->
+
 <center><img src="data/figures/haog.png" width="40%" height="40%" align="middle"></center>
+<p><center>Visualization of <b>Hand-Object Graph</b> (HAOG).</center></p>
 <!-- <center><img src="data/figures/haog.png" align="middle"></center> -->
-<hr><br>
+<br><hr>
 <table align=center>
     <center><h1 id="model">SViT</h1></center>
 </table>
@@ -295,7 +306,7 @@ Last, the final video downstream task prediction results from applying a video d
 </p>
 <br><br><br>
 <!-- <center><img src="data/figures/model figure.png" align="middle" width="400" height="500"></center> -->
-<center><img src="data/figures/model figure.png" align="middle"></center>
+<center><img src="data/figures/model figure.png" align="middle" width="100%"></center>
 <br><br>
 <hr>
 <br>
@@ -306,13 +317,10 @@ Last, the final video downstream task prediction results from applying a video d
 <table>
     <tr>
         <center>
-            <img src="data/figures/vis.png"/></center>
-        <p> <b>Hand-Object Graphs</b> detected by SViT.</p>
+            <img src="data/figures/vis.png" align="middle" width="100%"></center>
+        <p><center><b>Hand-Object Graphs</b> detected by SViT.</center></p>
     </tr>
 </table>
-<br><br>
-
-<br>
 
 <br><br>
 <hr>
